@@ -1,0 +1,22 @@
+{
+  "name": "js_recap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dlsrks0631/JS_RECAP.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dlsrks0631/JS_RECAP/issues"
+  },
+  "homepage": "https://github.com/dlsrks0631/JS_RECAP#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
