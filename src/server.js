@@ -14,7 +14,7 @@ app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 
 app.use(logger);
-app.use(exxpress.urlencoded({extended: true}));
+app.use(express.urlencoded({extended: true}));
 app.use("/", globalRouter);
 app.use("/videos", videoRouter); // 누군가 와서 /videos로 시작하는 url을 찾는다면 videoRouter로 들어감
 app.use("/users", userRouter);
