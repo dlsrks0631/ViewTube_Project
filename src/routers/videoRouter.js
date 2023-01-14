@@ -3,7 +3,6 @@ import { watch, getEdit, postEdit, getUpload, postUpload, deleteVideo } from "..
 
 const videoRouter = express.Router();  // videos/watch 
 
-
 videoRouter.route("/:id([0-9a-f]{24})").get(watch);
 videoRouter.route("/:id([0-9a-f]{24})/delete").get(deleteVideo);
 videoRouter.route("/:id([0-9a-f]{24})/edit").get(getEdit).post(postEdit);
