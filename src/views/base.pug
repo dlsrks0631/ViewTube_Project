@@ -6,17 +6,23 @@ html(lang="ko")
     body 
         header
             h1=pageTitle
-
             nav 
                 ul 
                     li 
                         a(href="/") Home
-                    if !req.session.loggedIn
+                    if loggedIn
+                        li
+                            a(href="/logout") Logout
+                        li 
+                            a(href="/my-profile") #{loggedInUser.name} 님의 프로필
+                    else
                         li 
                             a(href="/join") Join
                         li 
-                            a(href="/search") Search
+                            a(href="/login") Login
 
+                    li 
+                        a(href="/search") Search
                     li 
                         a(href="/videos/upload") Upload Video
         main
