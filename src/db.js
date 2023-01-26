@@ -1,11 +1,8 @@
 import mongoose from "mongoose";
-import "dotenv/config";
 
 mongoose.connect(process.env.DB_URL);
-// mongoose.connect("mongodb://127.0.0.1:27017/wetubedb", {
-//   useNewUrlParser: true,
-//   useUnifiedTopoloy: true,
-// });
+
+console.log(process.env.COOKIE_SECRET, process.env.DB_URL);
 
 const db = mongoose.connection;
 
