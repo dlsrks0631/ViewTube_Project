@@ -9,14 +9,19 @@ import {
   startKakaoLogin,
   finishKakaoLogin,
 } from "../controllers/userController";
+import { protectorMiddleware, publicOnlyMiddleware } from "../middlewares";
+
 const userRouter = express.Router(); // users/edit   users/delete
 
-userRouter.get("/logout", logout);
-userRouter.route("/edit").get(getEdit).post(postEdit);
-userRouter.get("/github/start", startGithubLogin);
-userRouter.get("/github/finish", finishGithubLogin);
+userRouter.get("/logout",protectorMiddleware, logout);
+userRouter.route("/edit").all(protectorMiddleware).get(getEdit).post(postEdit);
+
+userRouter.get("/github/start", publicOnlyMiddleware, startGithubLogin);
+userRouter.get("/github/finish", publicOnlyMiddleware, finishGithubLogin);
+
 userRouter.get("/kakao/start", startKakaoLogin);
 userRouter.get("/kakao/finish", finishKakaoLogin);
+
 userRouter.get(":id", see);
 
 export default userRouter;

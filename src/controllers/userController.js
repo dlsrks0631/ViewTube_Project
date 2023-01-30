@@ -199,8 +199,30 @@ export const getEdit = (req, res) => {
   return res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
 
-export const postEdit = (req, res) => {
-  return res.render("edit-profile");
+export const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { name, email, username, location },
+  } = req;
+  // == const id = req.session.user.id
+  // == const { name, email, username, location } = req.body;
+
+  const updateUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      name, //== name:name
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
+
+  req.session.user = updateUser;
+
+  return res.redirect("/users/edit");
 };
 
 export const logout = (req, res) => {
