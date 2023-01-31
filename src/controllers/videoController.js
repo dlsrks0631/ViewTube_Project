@@ -44,11 +44,13 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
+  const { path: fileUrl } = req.file; // multer은 req.file을 제공하고 file안에는 path가 있음
   const { title, description, hashtags } = req.body;
   try {
     await Video.create({
       title,
       description,
+      fileUrl,
       hashtags: Video.formatHashtags(hashtags),
     });
     return res.redirect("/");
@@ -72,7 +74,7 @@ export const search = async (req, res) => {
   if (keyword) {
     videos = await Video.find({
       title: {
-        $regex: new RegExp(keyword, "i")
+        $regex: new RegExp(keyword, "i"),
       },
     });
     return res.render("search", { pageTitle: "Search", videos });

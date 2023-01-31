@@ -202,9 +202,10 @@ export const getEdit = (req, res) => {
 export const postEdit = async (req, res) => {
   const {
     session: {
-      user: { _id },
+      user: { _id, avatarUrl },
     },
     body: { name, email, username, location },
+    file,
   } = req;
   // == const id = req.session.user.id
   // == const { name, email, username, location } = req.body;
@@ -212,6 +213,7 @@ export const postEdit = async (req, res) => {
   const updateUser = await User.findByIdAndUpdate(
     _id,
     {
+      avatarUrl: file ? file.path : avatarUrl, // file이 존재하면 file의 경로를 보내주고 file이 존재하지 않으면 기존 avatarUrl로 저장
       name, //== name:name
       email,
       username,
@@ -229,4 +231,59 @@ export const logout = (req, res) => {
   req.session.destroy();
   return res.redirect("/");
 };
+
+export const getChangePassword = (req, res) => {
+  if (req.session.user.socialOnly === true) {
+    return res.redirect("/");
+  }
+  return res.render("users/change-password", { pageTitle: "Change Password" });
+};
+export const postChangePassword = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { oldPassword, newPassword, newPasswordConfirmation },
+  } = req;
+  const user = await User.findById(_id);
+
+  // bcrypt함수를 사용해 전 해쉬된 비밀번호와 비교
+  const ok = await bcrypt.compare(oldPassword, user.password); 
+
+  // 현재 비밀번호가 정확하지 않을 때 보내는 오류
+  if(!ok) {
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The current password is incorrect",
+    });
+  }
+
+  // 변경 확인 비밀번호와 변경 비밀번호와 일치하지 않을 때 보내는 오류
+  if (newPassword !== newPasswordConfirmation) {
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The password does not match the confirmation",
+    });
+  }
+
+  // 이전 비밀번호와 변경 비밀번호가 같을 시 보내는 오류
+  if (oldPassword === newPassword) {
+    return res.status(400).render('users/change-password', {
+    pageTitle,
+    errorMessage: 'The old password equals new password',
+    });
+    }
+
+  user.password = newPassword;
+
+  // 방법 1
+  // await user.save(); // 새로운 비밀번호를 해쉬하기 위해 여기서 User.js에서 비밀번호 해쉬함수가 실행됨
+  // return res.redirect("/users/logout"); // 비밀번호 변경시 로그아웃
+
+  // 방법 2 (보안을 위해 좀 더 확실하게 destroy 해주는 방법)
+  await user.save();
+  req.session.destroy();
+  return res.redirect("/login");
+};
+
 export const see = (req, res) => res.send("See User");
