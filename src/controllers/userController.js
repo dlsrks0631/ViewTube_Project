@@ -1,4 +1,5 @@
 import User from "../models/User";
+import Video from "../models/Video";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 
@@ -248,10 +249,10 @@ export const postChangePassword = async (req, res) => {
   const user = await User.findById(_id);
 
   // bcrypt함수를 사용해 전 해쉬된 비밀번호와 비교
-  const ok = await bcrypt.compare(oldPassword, user.password); 
+  const ok = await bcrypt.compare(oldPassword, user.password);
 
   // 현재 비밀번호가 정확하지 않을 때 보내는 오류
-  if(!ok) {
+  if (!ok) {
     return res.status(400).render("users/change-password", {
       pageTitle: "Change Password",
       errorMessage: "The current password is incorrect",
@@ -268,11 +269,11 @@ export const postChangePassword = async (req, res) => {
 
   // 이전 비밀번호와 변경 비밀번호가 같을 시 보내는 오류
   if (oldPassword === newPassword) {
-    return res.status(400).render('users/change-password', {
-    pageTitle,
-    errorMessage: 'The old password equals new password',
+    return res.status(400).render("users/change-password", {
+      pageTitle,
+      errorMessage: "The old password equals new password",
     });
-    }
+  }
 
   user.password = newPassword;
 
@@ -286,4 +287,14 @@ export const postChangePassword = async (req, res) => {
   return res.redirect("/login");
 };
 
-export const see = (req, res) => res.send("See User");
+export const see = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id).populate("videos");
+  if (!user) {
+    return res.status(404).render("404", { pageTitle: "User not found" });
+  }
+  return res.render("users/profile", {
+    pageTitle: user.name,
+    user,
+  });
+};
