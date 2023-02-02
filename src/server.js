@@ -31,6 +31,8 @@ app.use(localsMiddleware);
 
 // Express에게 만약 누군가 /uploads로 가려고 한다면 uploads폴더의 내용을 보여쥬라 !!
 app.use("/uploads", express.static("uploads")); // express.static(노출시키고 싶은 폴더명)
+app.use("/static", express.static("assets")); // express.static(노출시키고 싶은 폴더명)
+
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
