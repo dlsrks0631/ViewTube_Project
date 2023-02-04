@@ -1,12 +1,16 @@
 // Config
 @import "./config/_variables.scss";
 @import "./config/_reset.scss";
-// Components
 
+// Components
 @import "./components/header.scss";
+@import "./components/footer.scss";
+
 // Screens
+@import "./screens/home.scss";
 
 // Defaults
+
 a {
   color: inherit;
   text-decoration: none;
@@ -17,4 +21,11 @@ body {
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   background-color: $bg;
   color: white;
+}
+
+main {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-top: 50px;
 }
