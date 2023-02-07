@@ -10,9 +10,9 @@ block content
         input(name="password", type="password", required, placeholder="Password")
         input(name="password2", type="password", required, placeholder="Confirm Password")
         input(name="location", type="text", required, placeholder="Location")
-        input(type="submit", value="Join")
-    hr
-    div 
+        input(type="submit", value="Join")    
+        include partials/social-login
+    div.auth-switch 
         span Already have an account? 
         a(href="/login") Log in now &rarr;
         
