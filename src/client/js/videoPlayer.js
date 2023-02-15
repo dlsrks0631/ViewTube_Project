@@ -42,7 +42,7 @@ const handleSpaceBarClick = (event) => {
 //// 화면 터치를 통한 비디오 실행 정지 ////
 const handlePlayByTouch = () => {
   handlePlayClick();
-}
+};
 
 //// 음소거 ////
 const handleMute = (event) => {
@@ -123,11 +123,18 @@ const handleMouseMove = () => {
 
   // 사용자가 마우스를 멈출 때 취소할 수 없는 새로운 timeout 생성
   // -> timeout은 마우스를 움직일 때만 취소되므로
-  controlsMovementTimeout = setTimeout(hideControls, 3000); 
-}; 
+  controlsMovementTimeout = setTimeout(hideControls, 3000);
+};
 
 const handleMouseLeave = () => {
   controlsTimeout = setTimeout(hideControls, 3000); // 3초 뒤에 hideControls
+};
+
+const handleEnded = () => {
+  const { id } = videoContainer.dataset;
+  fetch(`/api/videos/${id}/view`, {
+    method: "POST",
+  });
 };
 
 //// 비디오 실행/정지 ////
@@ -139,6 +146,9 @@ muteBtn.addEventListener("click", handleMute);
 volumeRange.addEventListener("input", handleVolumeChange); // input => 클릭하고 이동할때 반응
 video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
+
+video.addEventListener("ended", handleEnded);
+
 timeline.addEventListener("input", handleTimelineChange);
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
