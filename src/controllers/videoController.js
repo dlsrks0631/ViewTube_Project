@@ -63,13 +63,15 @@ export const postUpload = async (req, res) => {
   const {
     user: { _id },
   } = req.session; // 현재 로그인된 사용자
-  const { path: fileUrl } = req.file; // multer은 req.file을 제공하고 file안에는 path가 있음
+  const {video,thumb} = req.files;
+  console.log(video,thumb);
   const { title, description, hashtags } = req.body;
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl,
+      fileUrl: video[0].path,
+      thumbUrl: thumb[0].path.replace(/[\\]/g,"/"),
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     }); // 현재 로그인 중인 유저의 id를 사용

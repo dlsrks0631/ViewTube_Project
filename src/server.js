@@ -30,6 +30,12 @@ app.use(
 
 app.use(localsMiddleware);
 
+app.use((req, res, next) => {
+  res.header("Cross-Origin-Embedder-Policy", "require-corp");
+  res.header("Cross-Origin-Opener-Policy", "same-origin");
+  next();
+});
+
 // Express에게 만약 누군가 /uploads로 가려고 한다면 uploads폴더의 내용을 보여쥬라 !!
 app.use("/uploads", express.static("uploads")); // express.static(노출시키고 싶은 폴더명)
 app.use("/static", express.static("assets")); // express.static(노출시키고 싶은 폴더명)
