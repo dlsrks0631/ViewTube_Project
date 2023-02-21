@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import session from "express-session";
+import flash from "express-flash";
 import MongoStore from "connect-mongo";
 import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
@@ -15,7 +16,11 @@ app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 
 app.use(logger);
+
+// 서버에게 제공한 middleware로 덕분에 서버가 form으로부터 오는 data를 이해할 수 있는 것
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // 텍스트를 json으로 다시 변환해서 백엔드에서 사용할 거라고 이해하는 것
+
 
 console.log(process.env.COOKIE_SECRET);
 
@@ -28,6 +33,7 @@ app.use(
   })
 );
 
+app.use(flash());
 app.use(localsMiddleware);
 
 app.use((req, res, next) => {

@@ -7,18 +7,22 @@ export const localsMiddleware = (req, res, next) => {
   next();
 };
 
+// 로그인 돼 있지 않으면 멈추게 함
 export const protectorMiddleware = (req, res, next) => {
   if (req.session.loggedIn) {
     return next();
   } else {
+    req.flash("error", "Not authorized");
     return res.redirect("/login");
   }
 };
 
+// 로그인 돼 있으면 멈추게 함
 export const publicOnlyMiddleware = (req, res, next) => {
   if (!req.session.loggedIn) {
     return next();
   } else {
+    req.flash("error", "Not authorized");
     return res.redirect("/");
   }
 };

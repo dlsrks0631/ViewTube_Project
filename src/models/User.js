@@ -9,12 +9,14 @@ const userSchema = new mongoose.Schema({
   password: { type: String },
   name: { type: String, required: true },
   location: String,
+  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
   videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
 });
 
 // 저장된 비밀번호 HASH 해주는 함수
 userSchema.pre("save", async function () {
-  if (this.isModified("password")) { // 비밀번호가 수정되었을 시에만 새롭게 Hash
+  if (this.isModified("password")) {
+    // 비밀번호가 수정되었을 시에만 새롭게 Hash
     this.password = await bcrypt.hash(this.password, 5); // this == user
   }
 });
