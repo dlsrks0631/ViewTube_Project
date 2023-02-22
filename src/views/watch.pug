@@ -18,7 +18,7 @@ block content
                     i.fas.fa-volume-up
                 span#fullScreen 
                     i.fas.fa-expand
-        div 
+        div.video__data
             p=video.description
             small=video.createdAt 
         div 
@@ -30,10 +30,16 @@ block content
             a(href=`${video.id}/delete`) Delete Video &rarr;
 
     if loggedIn
-        div.video__comments
+        div.video__add-comments
             form.video__comment-form#commentForm 
                 textarea(cols="30", rows="10", placeholder="Write comment...") 
                 button Add Comment
+    div.video__comments
+        ul 
+            each comment in video.comments.reverse()
+                li.video__comment
+                    i.fas.fa-comment 
+                    |    #{comment.text}
 
 
 
