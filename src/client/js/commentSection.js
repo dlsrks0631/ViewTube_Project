@@ -2,11 +2,11 @@ const videoContainer = document.getElementById("videoContainer");
 const form = document.getElementById("commentForm");
 
 const handleSubmit = async (event) => {
-  event.preventDefault(); // 브라우저가 항상 하는 동작을 멈추도록 함
+  event.preventDefault();  // 브라우저가 항상 하는 동작을 멈추도록 함
   const textarea = form.querySelector("textarea");
   const text = textarea.value;
   const videoId = videoContainer.dataset.id;
-  if(text==="") {
+  if (text === "") {
     return;
   }
   await fetch(`/api/videos/${videoId}/comment`, {
@@ -18,7 +18,6 @@ const handleSubmit = async (event) => {
   });
   textarea.value = "";
 };
-
 if (form) {
-  form.addEventListener("click", handleSubmit);
+  form.addEventListener("submit", handleSubmit);
 }
