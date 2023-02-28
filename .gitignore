@@ -1,4 +1,6 @@
 /node_modules
 .env
 /uploads
+.DB_Store
 /assets
+/build
