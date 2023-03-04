@@ -4,30 +4,57 @@ import bcrypt from "bcrypt";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
-  console.log(req.body);
+  // req.body에서 변수 가져옴 (input에 반드시 name명시)
   const { name, username, email, password, password2, location } = req.body;
   const pageTitle = "Join";
-  if (password !== password2) {
-    return res.status(400).render("join", {
-      pageTitle,
-      errorMessage: "Password confirmation does not match.",
+
+  //// 중복 시 에러메세지 ////
+  // 아이디 중복 시
+  const usernameExists = await User.exists({ username });
+  if (usernameExists) {
+    return res.render("join", {
+      pageTitle, // pageTitle: pageTitle
+      errorMessage: "이미 사용 중인 아이디입니다.",
     });
   }
+
+  // 이메일 중복 시
+  const emailExists = await User.exists({ email });
+  if (emailExists) {
+    res.render("join", {
+      pageTitle,
+      errorMessage: "이미 사용 중인 이메일입니다."
+    })
+  }
+
+  // USERNAME, EMAIL 중복 제거 > 오류 메세지 하나로 할 경우
   const exists = await User.exists({ $or: [{ username }, { email }] });
   if (exists) {
     return res.status(400).render("join", {
       pageTitle,
-      errorMessage: "This username is already taken.",
+      errorMessage: "이미 사용 중 입니다.",
     });
   }
+  ////////
+
+  // 비밀번호 확인
+  if (password !== password2) {
+    return res.status(400).render("join", {
+      pageTitle,
+      errorMessage: "비밀번호가 일치하지 않습니다.",
+    });
+  }
+
+  // 유저 생성
   await User.create({
-    name,
+    name, // name: name
     username,
     email,
     password,
     location,
   });
-  return res.redirect("/login");
+
+  return res.redirect("/login"); // 계정 생성 후 로그인 페이지로 이동
 };
 
 export const getLogin = (req, res) =>
